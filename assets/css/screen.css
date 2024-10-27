@@ -1843,6 +1843,13 @@ Search                         LOGO                    Login Subscribe
     border-radius: 50%;
 }
 
+.gh-sidebar-image {
+    margin-bottom: 24px;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+}
+
 .gh-about-title {
     font-size: calc(2.4rem * var(--factor, 1));
     font-weight: 700;
