@@ -54,6 +54,18 @@
           </div>
         </section>
         {{/if}}
+
+        <section class="gh-canvas" style="text-align: center;">
+        <div>
+          {{#prev_post}}
+          ← <a class="gh-article-tag" href="{{url}}">{{title}}</a>
+          {{/prev_post}}
+          |
+          {{#next_post}}
+          <a class="gh-article-tag" href="{{url}}">{{title}}</a> →
+          {{/next_post}}
+        </div>
+        </section>        
         
     </article>
 
