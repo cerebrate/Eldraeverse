@@ -1844,7 +1844,8 @@ Search                         LOGO                    Login Subscribe
 }
 
 .gh-sidebar-image {
-    margin-bottom: 24px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     width: 128px;
     height: 128px;
     border-radius: 50%;
