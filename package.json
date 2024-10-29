@@ -160,7 +160,7 @@
                 "type": "boolean",
                 "default": false,
                 "group": "homepage",
-                "visibility": "header_style:[Highlight, Magazine]"
+                "visibility": "header_style:[Highlight, Magazine, Search]"
             },
             "post_feed_style": {
                 "type": "select",
