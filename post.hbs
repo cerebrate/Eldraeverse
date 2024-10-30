@@ -69,11 +69,24 @@
         
     </article>
 
-    {{#if comments}}
-        <div class="gh-comments gh-canvas">
-            {{comments}}
-        </div>
-    {{/if}}
+    <div class="gh-comments gh-canvas">
+        <div id='discourse-comments'></div>
+        <meta name='discourse-username' content='avatar'>
+
+        <script type="text/javascript">
+         DiscourseEmbed = {
+           discourseUrl: 'https://eldraeverse.discourse.group/',
+           discourseEmbedUrl: '{{url absolute="true"}}',
+           // className: 'CLASS_NAME',
+         };
+
+         (function() {
+           var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+           d.src = DiscourseEmbed.discourseUrl + 'javascripts/embed.js';
+           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+         })();
+        </script>
+    </div>
 
 </main>
 
