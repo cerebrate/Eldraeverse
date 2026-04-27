@@ -102,11 +102,17 @@ The theme is deployed using a tar archive to avoid syncing build artifacts and d
 2. Run `npm test` to validate the theme with gscan
 3. Verify `assets/built/` contains the latest compiled CSS and JS (run `npm run build` if needed)
 
-**Deployment Procedure:**
+**Quick deployment:**
+Use the provided deployment script to avoid manual command construction:
+```bash
+./_local/deploy.sh
+```
+
+**Manual deployment (if script unavailable):**
 
 1. **Create a deployment archive** (excludes node_modules, build tools, sourcemaps):
 ```bash
-tar --exclude=node_modules --exclude=.git --exclude=gulpfile.js --exclude=package-lock.json --exclude='*.map' -czf /tmp/eldraeverse-deploy.tar.gz .
+tar --exclude=node_modules --exclude=.git --exclude=gulpfile.js --exclude=package-lock.json --exclude='*.map' --exclude='_local' -czf /tmp/eldraeverse-deploy.tar.gz .
 ```
 
 2. **Transfer archive to wraith:**
@@ -121,7 +127,7 @@ ssh wraith "mkdir -p /opt/ghost/data/ghost/themes/eldraeverse && cd /opt/ghost/d
 
 4. **Restart Ghost** to reload the theme:
 ```bash
-ssh wraith "sudo systemctl restart ghost"
+ssh wraith "cd /opt/ghost && docker compose up -d --force-recreate ghost caddy"
 ```
 
 **What gets deployed:**
@@ -136,3 +142,24 @@ ssh wraith "sudo systemctl restart ghost"
 - `gulpfile.js` — build configuration
 - `*.map` — sourcemaps for debugging
 - `package-lock.json` — lock file
+- `_local/` — local development utilities (not deployed)
+
+## Security
+
+The theme includes the following security hardening measures:
+
+### URL Validation
+- **Pagination** - Validates all next-page URLs are same-origin before fetching, preventing open redirect XSS
+- **Lightbox** - Validates image URLs use http/https protocol only, preventing data: URI and javascript: protocol attacks
+
+### Input Validation
+- **Color settings** - CSS custom color setting validated to hex format (#RRGGBB or #RGB), preventing CSS injection
+- **Discourse configuration** - Removed hardcoded URLs; configured via Ghost Code Injection for security and portability
+
+### DOM Safety
+- **Dropdown menu** - Replaced innerHTML usage with safe DOM methods (createElement/createElementNS), eliminating HTML injection risk
+- **SVG generation** - Uses createElementNS() for proper namespace handling instead of HTML parsing
+
+### Additional Recommendations
+
+For defense-in-depth protection, configure a Content Security Policy (CSP) header at the Ghost/reverse proxy level. See `_local/CSP_SETUP.md` for detailed configuration guidance.
