@@ -7,7 +7,8 @@ function dropdown() {
     if (!nav) return;
 
     const logo = document.querySelector('.gh-navigation-logo');
-    const navHTML = nav.innerHTML;
+    // Store original nav state by cloning the element structure
+    const navClone = nav.cloneNode(true);
 
     if (mediaQuery.matches) {
         const items = nav.querySelectorAll('li');
@@ -37,7 +38,15 @@ function dropdown() {
         const toggle = document.createElement('button');
         toggle.setAttribute('class', 'gh-more-toggle gh-icon-button');
         toggle.setAttribute('aria-label', 'More');
-        toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M21.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM13.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM5.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0z"></path></svg>';
+        
+        // Create SVG icon using DOM methods instead of innerHTML
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 32 32');
+        svg.setAttribute('fill', 'currentColor');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M21.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM13.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM5.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0z');
+        svg.appendChild(path);
+        toggle.appendChild(svg);
 
         const wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'gh-dropdown');
@@ -86,7 +95,14 @@ function dropdown() {
 
     window.addEventListener('resize', function () {
         setTimeout(() => {
-            nav.innerHTML = navHTML;
+            // Restore nav to original state by cloning the stored structure
+            while (nav.firstChild) {
+                nav.removeChild(nav.firstChild);
+            }
+            const restoredClone = navClone.cloneNode(true);
+            while (restoredClone.firstChild) {
+                nav.appendChild(restoredClone.firstChild);
+            }
             makeDropdown();
         }, 1);
     });
