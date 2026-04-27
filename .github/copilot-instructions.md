@@ -8,22 +8,17 @@ This is a Ghost theme based on the Source theme, maintained for the Associated W
   - Watches `.hbs` files, `assets/css/**`, and `assets/js/**` for changes
   - Automatically rebuilds CSS and JS, triggers browser reload
   
-- **`npm run build`** or **`yarn build`** - Build CSS and JavaScript only
-  - Processes PostCSS with autoprefixer and cssnano
-  - Concatenates and minifies JS files
-  - Outputs to `assets/built/`
+- **`npm test`** - Build and validate the theme
+  - Runs `gulp build` (pretest hook) to compile CSS and JS to `assets/built/`
+  - Then runs `gscan` to check Ghost theme compatibility
 
 - **`npm run zip`** or **`yarn zip`** - Create distributable `.zip` file
   - Runs build first, then packages theme (excludes node_modules, dist, gulpfile.js)
   - Output: `dist/eldraeverse.zip`
 
-- **`npm test`** or **`yarn test`** - Run theme validation
-  - Uses `gscan` to check Ghost theme compatibility
-  - Automatically runs build first (pretest hook)
-
-- **`npm run test:ci`** or **`yarn test:ci`** - CI version of test
-  - Same as test but with `--fatal` and `--verbose` flags
-  - Treats warnings as errors
+- **`npm run test:ci`** or **`yarn test:ci`** - Strict CI version of theme validation
+  - Runs build first, then runs `gscan` with `--fatal` and `--verbose` flags
+  - Treats warnings as errors (recommended for pre-deployment)
 
 ## Architecture
 
@@ -102,14 +97,69 @@ The Gulp build system processes:
 
 **Target:** `wraith:/opt/ghost/data/ghost/themes/eldraeverse`
 
-The theme is deployed using `scp` to overwrite the entire theme directory on the target host. Before deploying, ensure:
+The theme is deployed using a tar archive to avoid syncing build artifacts and dependencies. Before deploying, ensure:
 1. All changes are committed and pushed
 2. Run `npm test` to validate the theme with gscan
 3. Verify `assets/built/` contains the latest compiled CSS and JS (run `npm run build` if needed)
 
-**Deployment command:**
+**Quick deployment:**
+Use the provided deployment script to avoid manual command construction:
 ```bash
-scp -r . wraith:/opt/ghost/data/ghost/themes/eldraeverse
+./_local/deploy.sh
 ```
 
-**Note:** This overwrites the entire theme directory on the host, including all files in the repo. The Ghost server will automatically reload the theme changes.
+**Manual deployment (if script unavailable):**
+
+1. **Create a deployment archive** (excludes node_modules, build tools, sourcemaps):
+```bash
+tar --exclude=node_modules --exclude=.git --exclude=gulpfile.js --exclude=package-lock.json --exclude='*.map' --exclude='_local' -czf /tmp/eldraeverse-deploy.tar.gz .
+```
+
+2. **Transfer archive to wraith:**
+```bash
+scp /tmp/eldraeverse-deploy.tar.gz wraith:/tmp/
+```
+
+3. **Extract on wraith** (creates/updates the theme directory):
+```bash
+ssh wraith "mkdir -p /opt/ghost/data/ghost/themes/eldraeverse && cd /opt/ghost/data/ghost/themes/eldraeverse && tar -xzf /tmp/eldraeverse-deploy.tar.gz --strip-components=1"
+```
+
+4. **Restart Ghost** to reload the theme:
+```bash
+ssh wraith "cd /opt/ghost && docker compose up -d --force-recreate ghost caddy"
+```
+
+**What gets deployed:**
+- All `.hbs` template and partial files
+- Compiled `assets/built/screen.css` and `assets/built/source.js`
+- Asset files (fonts, images, icons)
+- `package.json` and metadata files
+
+**What is excluded (not needed on production):**
+- `node_modules/` — build tools only
+- `.git/` — version control
+- `gulpfile.js` — build configuration
+- `*.map` — sourcemaps for debugging
+- `package-lock.json` — lock file
+- `_local/` — local development utilities (not deployed)
+
+## Security
+
+The theme includes the following security hardening measures:
+
+### URL Validation
+- **Pagination** - Validates all next-page URLs are same-origin before fetching, preventing open redirect XSS
+- **Lightbox** - Validates image URLs use http/https protocol only, preventing data: URI and javascript: protocol attacks
+
+### Input Validation
+- **Color settings** - CSS custom color setting validated to hex format (#RRGGBB or #RGB), preventing CSS injection
+- **Discourse configuration** - Removed hardcoded URLs; configured via Ghost Code Injection for security and portability
+
+### DOM Safety
+- **Dropdown menu** - Replaced innerHTML usage with safe DOM methods (createElement/createElementNS), eliminating HTML injection risk
+- **SVG generation** - Uses createElementNS() for proper namespace handling instead of HTML parsing
+
+### Additional Recommendations
+
+For defense-in-depth protection, configure a Content Security Policy (CSP) header at the Ghost/reverse proxy level. See `_local/CSP_SETUP.md` for detailed configuration guidance.
