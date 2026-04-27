@@ -69,42 +69,31 @@
         
     </article>
 
-    <div class="gh-comments gh-canvas">
-        <div id='discourse-comments'></div>
-        <meta name='discourse-username' content='avatar'>
+        <div class="gh-comments gh-canvas">
+            <div id='discourse-comments'></div>
+            <meta name='discourse-username' content='avatar'>
 
-        <script type="text/javascript">
-         DiscourseEmbed = {
-           discourseUrl: 'https://eldraeverse.discourse.group/',
-           discourseEmbedUrl: '{{url absolute="true"}}',
-           // className: 'CLASS_NAME',
-         };
+            <script type="text/javascript">
+             DiscourseEmbed = {
+               discourseUrl: 'https://eldraeverse.discourse.group/',
+               discourseEmbedUrl: '{{url absolute="true"}}',
+               // className: 'CLASS_NAME',
+             };
 
-         (function() {
-           var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
-           d.src = DiscourseEmbed.discourseUrl + 'javascripts/embed.js';
-           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
-         })();
-        </script>
-    </div>
+             (function() {
+               var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+               d.src = DiscourseEmbed.discourseUrl + 'javascripts/embed.js';
+               (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+             })();
+            </script>
+        </div>
 
 </main>
 
 {{/post}}
 
 {{#if @custom.show_related_articles}}
-    {{#get "posts" include="authors" filter="id:-{{post.id}}" limit="4" as |next|}}
-        {{#if next}}
-            <section class="gh-container is-grid gh-outer">
-                <div class="gh-container-inner gh-inner">
-                    <h2 class="gh-container-title">Read more</h2>
-                    <div class="gh-feed">
-                        {{#foreach next}}
-                            {{> "post-card" lazyLoad=true}}
-                        {{/foreach}}
-                    </div>
-                </div>
-            </section>
-        {{/if}}
-    {{/get}}
+
+  {{> related reltags=post.tags exclude=post.id}}
+
 {{/if}}

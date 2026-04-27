@@ -1,0 +1,36 @@
+<section class="gh-container is-grid gh-outer recommended">
+    <div class="gh-container-inner gh-inner">
+        <h2 class="gh-container-title">Related posts</h2>
+        <div class="gh-feed">
+            {{!-- get posts with first tag --}}
+            {{#get 'posts' filter="visibility:public+id:-[{{exclude}}]+tags:[{{inslug}}]" limit="4" include="authors" as
+            |relposts|}}
+            {{#foreach relposts}}
+            {{> "post-card" lazyLoad=true}}
+            {{/foreach}}
+            {{/get}}
+
+
+        {{!-- get posts with second tag --}}
+        {{#if inslug2}}
+            {{#get 'posts' filter="visibility:public+id:-[{{exclude}}]+tags:[{{inslug2}}]+tags:-[{{inslug}}]" limit="4" include="authors" as
+            |relposts|}}
+            {{#foreach relposts}}
+            {{> "post-card" lazyLoad=true}}
+            {{/foreach}}
+            {{/get}}
+        {{/if}}
+        
+        {{!-- get posts with third tag --}}
+        {{#if inslug3}}
+            {{#get 'posts' filter="visibility:public+id:-[{{exclude}}]+tags:[{{inslug3}}]+tags:-[{{inslug}},{{inslug2}}]" limit="4" include="authors" as
+            |relposts|}}
+            {{#foreach relposts}}
+            {{> "post-card" lazyLoad=true}}
+            {{/foreach}}
+            {{/get}}
+        {{/if}}
+        </div>
+    </div>
+</section>
+

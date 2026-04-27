@@ -1,0 +1,20 @@
+{{#get 'tags' filter="slug:[{{reltags[*].slug}}]+visibility:public" limit="3" include="count.posts" order="count.posts asc" as |toptag|}}
+
+{{#if toptag.[0].slug}}
+
+    {{#match toptag.[0].count.posts ">" 4}}
+      {{!-- The rarest tag has enough posts - go with that --}}
+      {{> related-single inslug=toptag.[0].slug exclude=../exclude  }}
+    {{else}}
+      {{!-- there are not enough posts with the rarest tag --}}
+      {{> related-two inslug=toptag.[0].slug exclude=../exclude inslug2=toptag.[1].slug inslug3=toptag.[2].slug }}
+
+    {{/match}}
+
+{{else}}
+
+    {{!-- no tags, just grab some posts to show --}}
+    {{> related-simple exclude=../exclude}}
+    {{/if}}
+{{/get}}
+
