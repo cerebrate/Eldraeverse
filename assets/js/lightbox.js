@@ -1,4 +1,14 @@
 function lightbox(trigger) {
+    // Validate that image URLs are safe (http/https protocol only)
+    var isValidImageUrl = function (url) {
+        try {
+            var urlObj = new URL(url, window.location.href);
+            return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+        } catch (e) {
+            return false;
+        }
+    };
+
     var onThumbnailsClick = function (e) {
         e.preventDefault();
 
@@ -11,15 +21,18 @@ function lightbox(trigger) {
             var prevItems = [];
 
             prevSibling.querySelectorAll('img').forEach(function (item) {
-                prevItems.push({
-                    src: item.getAttribute('src'),
-                    msrc: item.getAttribute('src'),
-                    w: item.getAttribute('width'),
-                    h: item.getAttribute('height'),
-                    el: item,
-                })
-
-                index += 1;
+                var src = item.getAttribute('src');
+                // Only add image if URL is valid
+                if (src && isValidImageUrl(src)) {
+                    prevItems.push({
+                        src: src,
+                        msrc: src,
+                        w: item.getAttribute('width'),
+                        h: item.getAttribute('height'),
+                        el: item,
+                    });
+                    index += 1;
+                }
             });
             prevSibling = prevSibling.previousElementSibling;
 
@@ -27,29 +40,37 @@ function lightbox(trigger) {
         }
 
         if (e.target.classList.contains('kg-image')) {
-            items.push({
-                src: e.target.getAttribute('src'),
-                msrc: e.target.getAttribute('src'),
-                w: e.target.getAttribute('width'),
-                h: e.target.getAttribute('height'),
-                el: e.target,
-            });
+            var src = e.target.getAttribute('src');
+            // Only add image if URL is valid
+            if (src && isValidImageUrl(src)) {
+                items.push({
+                    src: src,
+                    msrc: src,
+                    w: e.target.getAttribute('width'),
+                    h: e.target.getAttribute('height'),
+                    el: e.target,
+                });
+            }
         } else {
             var reachedCurrentItem = false;
 
             e.target.closest('.kg-gallery-card').querySelectorAll('img').forEach(function (item) {
-                items.push({
-                    src: item.getAttribute('src'),
-                    msrc: item.getAttribute('src'),
-                    w: item.getAttribute('width'),
-                    h: item.getAttribute('height'),
-                    el: item,
-                });
+                var src = item.getAttribute('src');
+                // Only add image if URL is valid
+                if (src && isValidImageUrl(src)) {
+                    items.push({
+                        src: src,
+                        msrc: src,
+                        w: item.getAttribute('width'),
+                        h: item.getAttribute('height'),
+                        el: item,
+                    });
 
-                if (!reachedCurrentItem && item !== e.target) {
-                    index += 1;
-                } else {
-                    reachedCurrentItem = true;
+                    if (!reachedCurrentItem && item !== e.target) {
+                        index += 1;
+                    } else {
+                        reachedCurrentItem = true;
+                    }
                 }
             });
         }
@@ -58,13 +79,17 @@ function lightbox(trigger) {
 
         while (nextSibling && (nextSibling.classList.contains('kg-image-card') || nextSibling.classList.contains('kg-gallery-card'))) {
             nextSibling.querySelectorAll('img').forEach(function (item) {
-                items.push({
-                    src: item.getAttribute('src'),
-                    msrc: item.getAttribute('src'),
-                    w: item.getAttribute('width'),
-                    h: item.getAttribute('height'),
-                    el: item,
-                })
+                var src = item.getAttribute('src');
+                // Only add image if URL is valid
+                if (src && isValidImageUrl(src)) {
+                    items.push({
+                        src: src,
+                        msrc: src,
+                        w: item.getAttribute('width'),
+                        h: item.getAttribute('height'),
+                        el: item,
+                    });
+                }
             });
             nextSibling = nextSibling.nextElementSibling;
         }
