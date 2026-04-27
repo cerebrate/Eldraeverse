@@ -17,10 +17,10 @@
     {{!-- Theme assets - use the {{asset}} helper to reference styles & scripts, this will take care of caching and cache-busting automatically --}}
     <link rel="stylesheet" type="text/css" href="{{asset "built/screen.css"}}">
 
-    {{!-- Custom background color --}}
+    {{!-- Custom background color - validate hex format to prevent CSS injection --}}
     <style>
         :root {
-            --background-color: {{@custom.site_background_color}}
+            --background-color: {{#match @custom.site_background_color "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"}}{{@custom.site_background_color}}{{else}}#ffffff{{/match}}
         }
     </style>
 
