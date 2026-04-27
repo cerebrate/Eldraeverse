@@ -97,14 +97,42 @@ The Gulp build system processes:
 
 **Target:** `wraith:/opt/ghost/data/ghost/themes/eldraeverse`
 
-The theme is deployed using `scp` to overwrite the entire theme directory on the target host. Before deploying, ensure:
+The theme is deployed using a tar archive to avoid syncing build artifacts and dependencies. Before deploying, ensure:
 1. All changes are committed and pushed
 2. Run `npm test` to validate the theme with gscan
 3. Verify `assets/built/` contains the latest compiled CSS and JS (run `npm run build` if needed)
 
-**Deployment command:**
+**Deployment Procedure:**
+
+1. **Create a deployment archive** (excludes node_modules, build tools, sourcemaps):
 ```bash
-scp -r . wraith:/opt/ghost/data/ghost/themes/eldraeverse
+tar --exclude=node_modules --exclude=.git --exclude=gulpfile.js --exclude=package-lock.json --exclude='*.map' -czf /tmp/eldraeverse-deploy.tar.gz .
 ```
 
-**Note:** This overwrites the entire theme directory on the host, including all files in the repo. The Ghost server will automatically reload the theme changes.
+2. **Transfer archive to wraith:**
+```bash
+scp /tmp/eldraeverse-deploy.tar.gz wraith:/tmp/
+```
+
+3. **Extract on wraith** (creates/updates the theme directory):
+```bash
+ssh wraith "mkdir -p /opt/ghost/data/ghost/themes/eldraeverse && cd /opt/ghost/data/ghost/themes/eldraeverse && tar -xzf /tmp/eldraeverse-deploy.tar.gz --strip-components=1"
+```
+
+4. **Restart Ghost** to reload the theme:
+```bash
+ssh wraith "sudo systemctl restart ghost"
+```
+
+**What gets deployed:**
+- All `.hbs` template and partial files
+- Compiled `assets/built/screen.css` and `assets/built/source.js`
+- Asset files (fonts, images, icons)
+- `package.json` and metadata files
+
+**What is excluded (not needed on production):**
+- `node_modules/` — build tools only
+- `.git/` — version control
+- `gulpfile.js` — build configuration
+- `*.map` — sourcemaps for debugging
+- `package-lock.json` — lock file
