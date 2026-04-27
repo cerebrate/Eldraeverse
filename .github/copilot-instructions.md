@@ -8,22 +8,17 @@ This is a Ghost theme based on the Source theme, maintained for the Associated W
   - Watches `.hbs` files, `assets/css/**`, and `assets/js/**` for changes
   - Automatically rebuilds CSS and JS, triggers browser reload
   
-- **`npm run build`** or **`yarn build`** - Build CSS and JavaScript only
-  - Processes PostCSS with autoprefixer and cssnano
-  - Concatenates and minifies JS files
-  - Outputs to `assets/built/`
+- **`npm test`** - Build and validate the theme
+  - Runs `gulp build` (pretest hook) to compile CSS and JS to `assets/built/`
+  - Then runs `gscan` to check Ghost theme compatibility
 
 - **`npm run zip`** or **`yarn zip`** - Create distributable `.zip` file
   - Runs build first, then packages theme (excludes node_modules, dist, gulpfile.js)
   - Output: `dist/eldraeverse.zip`
 
-- **`npm test`** or **`yarn test`** - Run theme validation
-  - Uses `gscan` to check Ghost theme compatibility
-  - Automatically runs build first (pretest hook)
-
-- **`npm run test:ci`** or **`yarn test:ci`** - CI version of test
-  - Same as test but with `--fatal` and `--verbose` flags
-  - Treats warnings as errors
+- **`npm run test:ci`** or **`yarn test:ci`** - Strict CI version of theme validation
+  - Runs build first, then runs `gscan` with `--fatal` and `--verbose` flags
+  - Treats warnings as errors (recommended for pre-deployment)
 
 ## Architecture
 
