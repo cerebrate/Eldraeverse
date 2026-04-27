@@ -10,9 +10,26 @@ function pagination(isInfinite = true, done, isMasonry = false) {
         buttonElement.remove();
     }
 
+    // Validate that a URL is same-origin to prevent XSS via open redirect
+    const isSameOrigin = function (url) {
+        try {
+            const urlObj = new URL(url, window.location.href);
+            return urlObj.origin === window.location.origin;
+        } catch (e) {
+            return false;
+        }
+    };
+
     const loadNextPage = async function () {
         const nextElement = document.querySelector('link[rel=next]');
         if (!nextElement) return;
+
+        // Validate URL before fetching
+        if (!isSameOrigin(nextElement.href)) {
+            console.error('Pagination: Invalid next link URL (not same-origin)');
+            nextElement.remove();
+            return;
+        }
 
         try {
             const res = await fetch(nextElement.href);
@@ -43,7 +60,13 @@ function pagination(isInfinite = true, done, isMasonry = false) {
 
             const resNextElement = doc.querySelector('link[rel=next]');
             if (resNextElement && resNextElement.href) {
-                nextElement.href = resNextElement.href;
+                // Validate the next URL from the fetched page as well
+                if (isSameOrigin(resNextElement.href)) {
+                    nextElement.href = resNextElement.href;
+                } else {
+                    console.error('Pagination: Invalid next link URL from page (not same-origin)');
+                    nextElement.remove();
+                }
             } else {
                 nextElement.remove();
                 if (buttonElement) {
