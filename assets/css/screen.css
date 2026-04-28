@@ -1715,6 +1715,75 @@ Search                         LOGO                    Login Subscribe
     border-bottom: 1px solid var(--color-border);
 }
 
+/* Latest full post component styling */
+
+.gh-latest-full-post {
+    position: relative;
+}
+
+.gh-latest-header {
+    margin-bottom: 28px;
+}
+
+.gh-latest-post-title {
+    margin-bottom: 12px;
+}
+
+.gh-latest-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    align-items: flex-start;
+    font-size: 0.95rem;
+}
+
+.gh-latest-author-image {
+    flex-shrink: 0;
+}
+
+.gh-latest-author-image img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.gh-latest-meta-wrapper {
+    flex-grow: 1;
+}
+
+.gh-latest-author-name {
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.gh-latest-meta-content {
+    display: flex;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.gh-latest-content {
+    margin-bottom: 28px;
+}
+
+.gh-latest-comments-cta {
+    margin-top: 24px;
+}
+
+.gh-latest-comments-cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 550;
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+.gh-latest-comments-cta a:hover {
+    opacity: 0.7;
+}
+
 .gh-container .gh-feed {
     gap: var(--grid-gap);
 }

@@ -9,12 +9,8 @@
         <article class="gh-latest-full-post">
             <header class="gh-latest-header">
                 <h3 class="gh-latest-post-title is-title">
-                    <a href="{{url}}">{{title}}</a>
+                    {{title}}
                 </h3>
-                
-                {{#if custom_excerpt}}
-                    <p class="gh-latest-excerpt is-body">{{custom_excerpt}}</p>
-                {{/if}}
                 
                 {{#if @custom.show_post_metadata}}
                     <div class="gh-latest-meta">
@@ -44,9 +40,13 @@
             
             {{> "feature-image"}}
             
-            <p class="gh-latest-cta">
-                <a href="{{url}}" class="gh-button">Read more & comment {{> "icons/arrow"}}</a>
-            </p>
+            <section class="gh-latest-content gh-content is-body{{#if @custom.enable_drop_caps_on_posts}} drop-cap{{/if}}">
+                {{content}}
+            </section>
+            
+            <div class="gh-latest-comments-cta">
+                <a href="{{url}}" class="is-title">View post & comment {{> "icons/arrow"}}</a>
+            </div>
         </article>
     {{/foreach}}
 {{/get}}
