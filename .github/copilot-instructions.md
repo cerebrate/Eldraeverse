@@ -26,15 +26,24 @@ This is a Ghost theme based on the Source theme, maintained for the Associated W
 
 ### Template Files (root `.hbs` files)
 - **`home.hbs`** - Homepage (overrides default landing page)
-- **`index.hbs`** - Main index/archive page
+  - Uses unified container layout with full sidebar on right
+  - Sections (top to bottom): Latest (full post) → CTA → Featured → Other Recent Posts
+  - All content in single `gh-main` column alongside sidebar
+- **`index.hbs`** - Main index/archive page (full-width, no sidebar)
 - **`post.hbs`** - Single post template
 - **`page.hbs`** - Static page template
-- **`tag.hbs`** - Tag archive page
-- **`author.hbs`** - Author profile page
+- **`tag.hbs`** - Tag archive page (full-width, no sidebar)
+- **`author.hbs`** - Author profile page (full-width, no sidebar)
 - **`default.hbs`** - Base wrapper for all templates
 
 ### Partials (`partials/` directory)
 - **`components/`** - Reusable component partials
+  - **`latest-full-post.hbs`** - Displays most recent post with full content on homepage
+    - Includes post title (H3), feature image, metadata, full content, and "View post & comment" link
+    - Used in home.hbs with full gh-content styling and paragraph spacing
+  - **`featured.hbs`** - Featured posts section (supports `skipContainer` parameter)
+  - **`post-list.hbs`** - Post feed with list/grid layouts (supports `skipContainer` and `skipFirst` parameters)
+  - **`cta.hbs`** - Call-to-action/newsletter signup (shown on home between Latest and Featured)
 - **`typography/`** - Font and text styling partials
 - **`icons/`** - Icon SVG partials
 - Post card variants: `post-card.hbs`, `related.hbs`, `related-simple.hbs`, `related-two.hbs`
@@ -61,6 +70,33 @@ The Gulp build system processes:
 
 ## Key Conventions
 
+### Homepage Layout Architecture
+
+The homepage uses a **unified container layout** where the page template (home.hbs) owns the layout structure once, and components render content without their own container wrappers.
+
+**Layout structure:**
+- `<section class="gh-container has-sidebar gh-outer">` - Main container with 16-column grid
+  - `<main class="gh-main">` - Left column (12 cols) containing all content sections
+    - `Latest` heading + `latest-full-post` component (full post display)
+    - `cta` component (newsletter signup)
+    - `featured` component (featured posts section)
+    - `Other Recent Posts` heading + `post-list` component (feed with 12 posts)
+  - `<aside class="gh-sidebar">` - Right column (4 cols) with subscription/support options
+
+**Key parameters for components:**
+- `skipContainer=true` - Component renders content without its own `gh-container` wrapper (used by featured and post-list)
+- `skipFirst=true` - Post-list skips the most recent post (displayed separately in Latest section above)
+- Post fetch limits adjusted when `skipFirst=true`: add 1 to limit to compensate for skipped post
+
+**Pages without sidebar:**
+- `index.hbs`, `tag.hbs`, `author.hbs` - Full-width layout, no sidebar (each wraps content in single `gh-container`)
+- `post.hbs` - Single post display (not refactored, different layout)
+
+**CSS grid spacing:**
+- Direct children of `gh-main` get margin spacing: 64px between sections
+- `.gh-feed` gets gap spacing: `var(--grid-gap)` (42px) between post cards
+- Both `.gh-container .gh-feed` and `.gh-main > .gh-feed` rules ensure spacing works in all contexts
+
 ### CSS
 - Uses **PostCSS** with `postcss-easy-import` for modular stylesheets
 - Autoprefixer adds vendor prefixes automatically
@@ -77,6 +113,36 @@ The Gulp build system processes:
 - Ghost context helpers and variables are available in all templates
 - Partials use `{{> name}}` syntax
 - Custom theme configuration exposed in `@custom` context (see package.json `custom` field)
+
+### Component Parameters
+
+**featured.hbs:**
+- `showFeatured` - Boolean to show/hide featured section
+- `limit` - Number of featured posts to display (default: 4)
+- `skipContainer` - When true, omits outer `gh-outer`/`gh-inner` divs (used on home.hbs)
+
+**post-list.hbs:**
+- `feed` - Feed type: "home", "index", "archive" (determines which posts to fetch and how many)
+- `postFeedStyle` - Layout style: "list" or "grid" (controls CSS class and display)
+- `showTitle` - Boolean to show/hide section title
+- `showSidebar` - Boolean to render sidebar (only used on archive/tag/author pages)
+- `skipContainer` - When true, omits outer `gh-container`/`gh-main` divs (used on home.hbs)
+- `skipFirst` - When true, skips the most recent post from feed (used on home.hbs)
+
+**Homepage post fetch limits (post-list.hbs, feed="home"):**
+When `skipFirst=false` (default):
+  - Highlight with featured: 16 posts (skip 5)
+  - Highlight without featured: 22 posts (skip 11)
+  - Magazine: 19 posts (skip 8)
+  - Default: 12 posts (show all)
+
+When `skipFirst=true` (incremented by 1 to compensate for skipped post):
+  - Highlight with featured: 17 posts (skip 6)
+  - Highlight without featured: 23 posts (skip 12)
+  - Magazine: 20 posts (skip 9)
+  - Default: 13 posts (skip 2)
+
+This ensures 12 posts appear in the "Other Recent Posts" section while the latest post is displayed separately above.
 
 ### Ghost Theme Configuration
 - Theme customization options defined in `package.json` under `config.custom`
