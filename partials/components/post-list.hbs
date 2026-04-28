@@ -5,6 +5,7 @@
     * showTitle (true, false)
     * showSidebar (true, false)
     * skipContainer (true, false) - skip gh-container wrapper, render just header + feed
+    * skipFirst (true, false) - skip the most recent post (useful on home when showing latest-full-post)
 --}}
 
 {{#unless skipContainer}}
@@ -26,35 +27,67 @@
                     {{#match @custom.header_style "Highlight"}}
                         {{#if @custom.show_featured_posts}}
                             {{#match posts.length ">=" 4}}
-                                {{#get "posts" include="authors" limit="16"}}
-                                    {{#foreach posts from="5"}}
-                                        {{> "post-card" lazyLoad=true}}
-                                    {{/foreach}}
-                                {{/get}}
+                                {{#if skipFirst}}
+                                    {{#get "posts" include="authors" limit="16"}}
+                                        {{#foreach posts from="6"}}
+                                            {{> "post-card" lazyLoad=true}}
+                                        {{/foreach}}
+                                    {{/get}}
+                                {{else}}
+                                    {{#get "posts" include="authors" limit="16"}}
+                                        {{#foreach posts from="5"}}
+                                            {{> "post-card" lazyLoad=true}}
+                                        {{/foreach}}
+                                    {{/get}}
+                                {{/if}}
                             {{/match}}
                         {{else}}
                             {{#match posts.length ">=" 10}}
-                                {{#get "posts" include="authors" limit="22"}}
-                                    {{#foreach posts from="11"}}
-                                        {{> "post-card" lazyLoad=true}}
-                                    {{/foreach}}
-                                {{/get}}
+                                {{#if skipFirst}}
+                                    {{#get "posts" include="authors" limit="22"}}
+                                        {{#foreach posts from="12"}}
+                                            {{> "post-card" lazyLoad=true}}
+                                        {{/foreach}}
+                                    {{/get}}
+                                {{else}}
+                                    {{#get "posts" include="authors" limit="22"}}
+                                        {{#foreach posts from="11"}}
+                                            {{> "post-card" lazyLoad=true}}
+                                        {{/foreach}}
+                                    {{/get}}
+                                {{/if}}
                             {{/match}}
                         {{/if}}
                     {{else match @custom.header_style "Magazine"}}
                         {{#match posts.length ">=" 7}}
-                            {{#get "posts" include="authors" limit="19"}}
-                                {{#foreach posts from="8"}}
+                            {{#if skipFirst}}
+                                {{#get "posts" include="authors" limit="19"}}
+                                    {{#foreach posts from="9"}}
+                                        {{> "post-card" lazyLoad=true}}
+                                    {{/foreach}}
+                                {{/get}}
+                            {{else}}
+                                {{#get "posts" include="authors" limit="19"}}
+                                    {{#foreach posts from="8"}}
+                                        {{> "post-card" lazyLoad=true}}
+                                    {{/foreach}}
+                                {{/get}}
+                            {{/if}}
+                        {{/match}}
+                    {{else}}
+                        {{#if skipFirst}}
+                            {{#get "posts" include="authors" limit="12"}}
+                                {{#foreach posts from="2"}}
                                     {{> "post-card" lazyLoad=true}}
                                 {{/foreach}}
                             {{/get}}
-                        {{/match}}
-                    {{else}}
-                        {{#get "posts" include="authors" limit="12"}}
-                            {{#foreach posts}}
-                                {{> "post-card" lazyLoad=true}}
-                            {{/foreach}}
-                        {{/get}}
+                        {{else}}
+                            {{#get "posts" include="authors" limit="12"}}
+                                {{#foreach posts}}
+                                    {{> "post-card" lazyLoad=true}}
+                                {{/foreach}}
+                            {{/get}}
+                        {{/if}}
                     {{/match}}
                 {{/match}}
 
