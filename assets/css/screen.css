@@ -1624,6 +1624,12 @@ Search                         LOGO                    Login Subscribe
     display: block;
 }
 
+.gh-feed > .gh-more {
+    display: block;
+    margin-top: 24px;
+    grid-column: unset;
+}
+
 .gh-more a {
     display: flex;
     align-items: center;
