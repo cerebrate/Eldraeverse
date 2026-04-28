@@ -88,7 +88,7 @@
             {{/match}}
             {{#unless skipContainer}}</main>{{/unless}}
 
-            {{#if showSidebar}}
+            {{#if showSidebar}}{{#unless skipContainer}}
                 <aside class="gh-sidebar">
                     <div class="gh-sidebar-inner">
                         <section class="gh-about">
@@ -154,7 +154,7 @@
                         {{/if}}
                     </div>
                 </aside>
-            {{/if}}
+            {{/unless}}{{/if}}
 
 {{#unless skipContainer}}
         </div>
