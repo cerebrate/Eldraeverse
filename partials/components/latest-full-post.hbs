@@ -4,13 +4,15 @@
     Located between Featured section and Latest (archive) list
 --}}
 
+<h2 class="gh-latest-title">Latest</h2>
+
 {{#get "posts" limit="1" include="authors"}}
     {{#foreach posts}}
         <article class="gh-latest-full-post">
             <header class="gh-latest-header">
-                <h2 class="gh-latest-title is-title">
+                <h3 class="gh-latest-post-title is-title">
                     <a href="{{url}}">{{title}}</a>
-                </h2>
+                </h3>
                 
                 {{#if custom_excerpt}}
                     <p class="gh-latest-excerpt is-body">{{custom_excerpt}}</p>
