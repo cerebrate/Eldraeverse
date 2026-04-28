@@ -34,8 +34,25 @@ function pagination(isInfinite = true, done, isMasonry = false) {
         try {
             const res = await fetch(nextElement.href);
             const html = await res.text();
+            
+            // Extract the next link from raw HTML BEFORE sanitizing
+            // This preserves pagination metadata even if sanitization is strict
+            const tempParser = new DOMParser();
+            const tempDoc = tempParser.parseFromString(html, 'text/html');
+            const nextLinkFromPage = tempDoc.querySelector('link[rel=next]');
+            let nextPageUrl = null;
+            if (nextLinkFromPage && nextLinkFromPage.href) {
+                nextPageUrl = nextLinkFromPage.href;
+            }
+            
+            // Sanitize HTML before parsing to prevent XSS via malicious content
+            // Use a permissive whitelist to preserve Ghost theme structure
+            const sanitizedHtml = DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: ['div', 'article', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'img', 'strong', 'em', 'ul', 'ol', 'li', 'span', 'section', 'header', 'footer', 'figure', 'figcaption'],
+                ALLOWED_ATTR: ['src', 'alt', 'href', 'class', 'id', 'width', 'height', 'loading', 'style']
+            });
             const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
+            const doc = parser.parseFromString(sanitizedHtml, 'text/html');
 
             const postElements = doc.querySelectorAll('.gh-feed:not(.gh-featured):not(.gh-related) > *');
             const fragment = document.createDocumentFragment();
@@ -58,11 +75,11 @@ function pagination(isInfinite = true, done, isMasonry = false) {
                 done(elems, loadNextWithCheck);
             }
 
-            const resNextElement = doc.querySelector('link[rel=next]');
-            if (resNextElement && resNextElement.href) {
-                // Validate the next URL from the fetched page as well
-                if (isSameOrigin(resNextElement.href)) {
-                    nextElement.href = resNextElement.href;
+            // Use the next URL extracted from raw HTML before sanitizing
+            if (nextPageUrl) {
+                // Validate the next URL from the fetched page
+                if (isSameOrigin(nextPageUrl)) {
+                    nextElement.href = nextPageUrl;
                 } else {
                     console.error('Pagination: Invalid next link URL from page (not same-origin)');
                     nextElement.remove();

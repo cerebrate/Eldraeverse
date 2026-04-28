@@ -213,5 +213,8 @@
         "extends": [
             "@tryghost:theme"
         ]
+    },
+    "dependencies": {
+        "dompurify": "^3.4.1"
     }
 }
