@@ -91,7 +91,9 @@ The Gulp build system processes:
 
 ### Compatibility
 - Minimum Ghost version: **5.0.0** (defined in package.json engines)
+- Currently tested and deployed against: **Ghost 6.32.0**
 - Uses browserslist default targets for browser support
+- Can use any features supported by Ghost 6.32.0 and later
 
 ## Deployment
 
