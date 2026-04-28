@@ -20,7 +20,7 @@
             {{/if}}
 
             {{#unless skipContainer}}<main class="gh-main">{{/unless}}
-            <div class="gh-feed">
+            <div class="gh-feed{{#if skipContainer}} is-{{#match postFeedStyle "List"}}list{{else}}grid{{/match}}{{/if}}">
 
                 {{!-- Homepage --}}
                 {{#match feed "home"}}

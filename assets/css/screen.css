@@ -1711,6 +1711,24 @@ Search                         LOGO                    Login Subscribe
     gap: var(--grid-gap);
 }
 
+.gh-main > .gh-feed {
+    gap: var(--grid-gap);
+}
+
+.gh-main > .gh-feed.is-list {
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+    container-name: list-feed;
+}
+
+.gh-main > .gh-feed.is-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+    row-gap: calc(var(--grid-gap) * 1.5);
+    overflow: hidden;
+}
+
 .gh-container .gh-card-meta:not(:empty) {
     margin-top: 16px;
 }
