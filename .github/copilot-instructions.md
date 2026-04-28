@@ -161,6 +161,13 @@ The theme includes the following security hardening measures:
 ### DOM Safety
 - **Dropdown menu** - Replaced innerHTML usage with safe DOM methods (createElement/createElementNS), eliminating HTML injection risk
 - **SVG generation** - Uses createElementNS() for proper namespace handling instead of HTML parsing
+- **Pagination** - Uses DOMPurify to sanitize fetched HTML before DOM insertion, preventing XSS from compromised pages
+
+### HTML Sanitization
+- **DOMPurify library** - Lightweight (~4KB gzipped) HTML sanitization library prevents XSS attacks
+- **Pagination integration** - Fetched page HTML is sanitized before parsing, while pagination metadata is preserved
+- **How it works**: Extract pagination link from raw HTML → Sanitize content with DOMPurify → Parse sanitized HTML → Use pre-extracted URL
+- **Extensible**: DOMPurify can be applied to any other content source that needs sanitization
 
 ### Additional Recommendations
 
