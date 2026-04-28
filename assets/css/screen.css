@@ -2529,7 +2529,11 @@ figcaption a {
 }
 
 .gh-archive:not(.has-sidebar):not(.has-image) .gh-archive-inner {
-    grid-column: 3 / span 12;
+    grid-column: 1 / -1;
+}
+
+.gh-archive:not(.has-image) .gh-archive-wrapper {
+    grid-column: 1 / -1;
 }
 
 .gh-archive .gh-article-image {
