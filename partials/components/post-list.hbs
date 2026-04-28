@@ -4,18 +4,21 @@
     * postFeedStyle (list, grid)
     * showTitle (true, false)
     * showSidebar (true, false)
+    * skipContainer (true, false) - skip gh-container wrapper, render just header + feed
 --}}
 
-<section class="gh-container is-{{#match postFeedStyle "List"}}list{{else}}grid{{/match}}{{#if showSidebar}} has-sidebar{{/if}}{{#unless @custom.show_images_in_feed}} no-image{{/unless}} gh-outer">
-    <div class="gh-container-inner gh-inner">
+{{#unless skipContainer}}
+    <section class="gh-container is-{{#match postFeedStyle "List"}}list{{else}}grid{{/match}}{{#if showSidebar}} has-sidebar{{/if}}{{#unless @custom.show_images_in_feed}} no-image{{/unless}} gh-outer">
+        <div class="gh-container-inner gh-inner">
+{{/unless}}
         
-        {{#if showTitle}}
-            <h2 class="gh-container-title">
-                {{#unless title}}Latest{{else}}{{title}}{{/unless}}
-            </h2>
-        {{/if}}
+            {{#if showTitle}}
+                <h2 class="gh-container-title">
+                    {{#unless title}}Latest{{else}}{{title}}{{/unless}}
+                </h2>
+            {{/if}}
 
-        <main class="gh-main">
+            {{#unless skipContainer}}<main class="gh-main">{{/unless}}
             <div class="gh-feed">
 
                 {{!-- Homepage --}}
@@ -83,75 +86,77 @@
                     <a href="{{@site.url}}/page/2">See all {{> "icons/arrow"}}</a>
                 </div>
             {{/match}}
-        </main>
+            {{#unless skipContainer}}</main>{{/unless}}
 
-        {{#if showSidebar}}
-            <aside class="gh-sidebar">
-                <div class="gh-sidebar-inner">
-                    <section class="gh-about">
-                        {{#if @site.icon}}
-                            <img class="gh-about-icon" src="{{@site.icon}}" alt="{{@site.title}}" loading="lazy">
-                        {{/if}}
-                        <h3 class="gh-about-title is-title">{{@site.title}}</h3>
-                        {{#if @site.description}}
-                            <p class="gh-about-description is-body">{{@site.description}}</p>
-                        {{/if}}
+            {{#if showSidebar}}
+                <aside class="gh-sidebar">
+                    <div class="gh-sidebar-inner">
+                        <section class="gh-about">
+                            {{#if @site.icon}}
+                                <img class="gh-about-icon" src="{{@site.icon}}" alt="{{@site.title}}" loading="lazy">
+                            {{/if}}
+                            <h3 class="gh-about-title is-title">{{@site.title}}</h3>
+                            {{#if @site.description}}
+                                <p class="gh-about-description is-body">{{@site.description}}</p>
+                            {{/if}}
 
-                        <a href="http://www.projectrho.com/public_html/rocket/sealofapproval.php#id--Science_Fiction_Novels--Vignettes_of_the_Star_Empire">
-                        <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-seal-128.png" alt="Atomic Rocket: Seal of Approval" loading="lazy">
-                        </a>
-
-                        <p class="gh-about-description is-body">Enjoy my nanofic?</p>
-
-                        {{#if @site.members_enabled}}
-                            {{#unless @member}}
-                                <button class="gh-button" data-portal="signup">Subscribe</button>
-                            {{else}}
-                                {{#if @site.paid_members_enabled}}
-                                    {{#unless @member.paid}}
-                                        <button class="gh-button" data-portal="upgrade">Upgrade</button>
-                                    {{/unless}}
-                                {{/if}}
-                            {{/unless}}
-                        {{/if}}
-
-                        <p class="gh-about-description is-body">Want to support my writing? Please also consider pledging a monthly donation to support me long-term.</p>
-
-                        <p class="gh-about-description is-body">Alternatively, you can support me through Liberapay:</p>
-
-                        <p>
-                          <script src="https://liberapay.com/eldraeverse/widgets/button.js"></script>
-                          <noscript>
-                            <a href="https://liberapay.com/eldraeverse/donate">
-                              <img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg">
+                            <a href="http://www.projectrho.com/public_html/rocket/sealofapproval.php#id--Science_Fiction_Novels--Vignettes_of_the_Star_Empire">
+                            <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-seal-128.png" alt="Atomic Rocket: Seal of Approval" loading="lazy">
                             </a>
-                          </noscript>
-                        </p>
 
-                        <p class="gh-about-description is-body">Or Patreon:</p>
+                            <p class="gh-about-description is-body">Enjoy my nanofic?</p>
 
-                        <p>
-                          <a href="https://www.patreon.com/bePatron?u=93809" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
-                          <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
-                        </p>
+                            {{#if @site.members_enabled}}
+                                {{#unless @member}}
+                                    <button class="gh-button" data-portal="signup">Subscribe</button>
+                                {{else}}
+                                    {{#if @site.paid_members_enabled}}
+                                        {{#unless @member.paid}}
+                                            <button class="gh-button" data-portal="upgrade">Upgrade</button>
+                                        {{/unless}}
+                                    {{/if}}
+                                {{/unless}}
+                            {{/if}}
 
-                        <p class="gh-about-description is-body">I very much appreciate any contributions, large or small. Thank you kindly in advance for helping me spend more time doing the thing I love.</p>
+                            <p class="gh-about-description is-body">Want to support my writing? Please also consider pledging a monthly donation to support me long-term.</p>
 
-                        <a href="http://www.projectrho.com/public_html/rocket/index.php">
-                        <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-patron-128.png" alt="Atomic Rocket: Patron Level Gamma" loading="lazy">
-                        </a>
+                            <p class="gh-about-description is-body">Alternatively, you can support me through Liberapay:</p>
 
-                    </section>
-                    {{#if @site.recommendations_enabled}}
-                        <section class="gh-recommendations">
-                            <h4 class="gh-sidebar-title">Recommendations</h4>
-                            {{recommendations}}
-                            <button data-portal="recommendations">See all {{> "icons/arrow"}}</button>
+                            <p>
+                              <script src="https://liberapay.com/eldraeverse/widgets/button.js"></script>
+                              <noscript>
+                                <a href="https://liberapay.com/eldraeverse/donate">
+                                  <img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg">
+                                </a>
+                              </noscript>
+                            </p>
+
+                            <p class="gh-about-description is-body">Or Patreon:</p>
+
+                            <p>
+                              <a href="https://www.patreon.com/bePatron?u=93809" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+                              <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+                            </p>
+
+                            <p class="gh-about-description is-body">I very much appreciate any contributions, large or small. Thank you kindly in advance for helping me spend more time doing the thing I love.</p>
+
+                            <a href="http://www.projectrho.com/public_html/rocket/index.php">
+                            <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-patron-128.png" alt="Atomic Rocket: Patron Level Gamma" loading="lazy">
+                            </a>
+
                         </section>
-                    {{/if}}
-                </div>
-            </aside>
-        {{/if}}
+                        {{#if @site.recommendations_enabled}}
+                            <section class="gh-recommendations">
+                                <h4 class="gh-sidebar-title">Recommendations</h4>
+                                {{recommendations}}
+                                <button data-portal="recommendations">See all {{> "icons/arrow"}}</button>
+                            </section>
+                        {{/if}}
+                    </div>
+                </aside>
+            {{/if}}
 
-    </div>
-</section>
+{{#unless skipContainer}}
+        </div>
+    </section>
+{{/unless}}
