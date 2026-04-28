@@ -381,6 +381,24 @@ button.gh-form-input {
     flex-grow: 1;
 }
 
+/* Spacing between sections in gh-main (home page layout) */
+.gh-main > .gh-featured {
+    margin-top: 0;
+    margin-bottom: 64px;
+}
+
+.gh-main > h2.gh-latest-title {
+    margin-top: 64px;
+}
+
+.gh-main > .gh-latest-full-post {
+    margin-bottom: 64px;
+}
+
+.gh-main > .gh-container {
+    margin-top: 0;
+}
+
 .gh-canvas,
 .kg-width-full.kg-content-wide {
     --main: min(var(--content-width, 720px), 100% - var(--container-gap) * 2);

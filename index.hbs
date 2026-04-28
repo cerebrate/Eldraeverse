@@ -3,47 +3,10 @@
 
 {{#contentFor "title"}}{{@site.title}} (Archives){{/contentFor}}
 
-<section class="gh-container is-list has-sidebar gh-outer">
+<section class="gh-container is-list gh-outer">
     <div class="gh-container-inner gh-inner">
         <main class="gh-main">
             {{> "components/post-list" feed="index" postFeedStyle=@custom.post_feed_style showTitle=true showSidebar=false skipContainer=true}}
         </main>
-        {{#if @custom.show_publication_info_sidebar}}
-            <aside class="gh-sidebar">
-                <div class="gh-sidebar-inner">
-                    <section class="gh-about">
-                        {{#if @site.icon}}
-                            <img class="gh-about-icon" src="{{@site.icon}}" alt="{{@site.title}}" loading="lazy">
-                        {{/if}}
-                        <h3 class="gh-about-title is-title">{{@site.title}}</h3>
-                        {{#if @site.description}}
-                            <p class="gh-about-description is-body">{{@site.description}}</p>
-                        {{/if}}
-                        
-                        <a href="http://www.projectrho.com/public_html/rocket/sealofapproval.php#id--Science_Fiction_Novels--Vignettes_of_the_Star_Empire">
-                            <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-seal-128.png" alt="Atomic Rocket: Seal of Approval" loading="lazy">
-                        </a>
-                        
-                        <p class="gh-about-description is-body">Enjoy my nanofic?</p>
-                        
-                        {{#if @site.members_enabled}}
-                            {{#unless @member}}
-                                <button class="gh-button" data-portal="signup">Subscribe</button>
-                            {{else}}
-                                {{#if @site.paid_members_enabled}}
-                                    {{#unless @member.paid}}
-                                        <a class="gh-button gh-button-secondary" href="{{@site.url}}/membership">Become a patron</a>
-                                    {{/unless}}
-                                {{/if}}
-                            {{/unless}}
-                        {{/if}}
-                        
-                        <a href="http://www.projectrho.com/public_html/rocket/sealofapproval.php#id--Science_Fiction_Novels--Vignettes_of_the_Star_Empire">
-                            <img class="gh-sidebar-image" src="/assets/images/atomic-rocket-patron-128.png" alt="Atomic Rocket: Patron Level Gamma" loading="lazy">
-                        </a>
-                    </section>
-                </div>
-            </aside>
-        {{/if}}
     </div>
 </section>
