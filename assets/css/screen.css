@@ -391,6 +391,14 @@ button.gh-form-input {
     margin-top: 64px;
 }
 
+.gh-main > h2.gh-latest-title:first-child {
+    margin-top: 0;
+}
+
+.gh-main > h2.gh-container-title {
+    margin-top: 64px;
+}
+
 .gh-main > .gh-latest-full-post {
     margin-bottom: 64px;
 }

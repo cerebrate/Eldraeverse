@@ -7,17 +7,19 @@
     <div class="gh-container-inner gh-inner">
         <main class="gh-main">
 
+            <h2 class="gh-latest-title">Latest</h2>
+
+            {{> "components/latest-full-post"}}
+
             {{#match @custom.header_style "!=" "Highlight"}}
                 {{> "components/featured" showFeatured=@custom.show_featured_posts limit=4 skipContainer=true}}
             {{/match}}
 
             {{> "components/cta"}}
 
-            <h2 class="gh-latest-title">Latest</h2>
+            <h2 class="gh-container-title">Other Recent Posts</h2>
 
-            {{> "components/latest-full-post"}}
-
-            {{> "components/post-list" feed="home" postFeedStyle=@custom.post_feed_style showTitle=true showSidebar=false skipContainer=true skipFirst=true}}
+            {{> "components/post-list" feed="home" postFeedStyle=@custom.post_feed_style showTitle=false showSidebar=false skipContainer=true skipFirst=true}}
 
         </main>
         
