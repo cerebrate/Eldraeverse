@@ -11,11 +11,11 @@
 
             {{> "components/latest-full-post"}}
 
+            {{> "components/cta"}}
+
             {{#match @custom.header_style "!=" "Highlight"}}
                 {{> "components/featured" showFeatured=@custom.show_featured_posts limit=4 skipContainer=true}}
             {{/match}}
-
-            {{> "components/cta"}}
 
             <h2 class="gh-container-title">Other Recent Posts</h2>
 
