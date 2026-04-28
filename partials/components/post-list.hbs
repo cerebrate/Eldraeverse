@@ -28,7 +28,7 @@
                         {{#if @custom.show_featured_posts}}
                             {{#match posts.length ">=" 4}}
                                 {{#if skipFirst}}
-                                    {{#get "posts" include="authors" limit="16"}}
+                                    {{#get "posts" include="authors" limit="17"}}
                                         {{#foreach posts from="6"}}
                                             {{> "post-card" lazyLoad=true}}
                                         {{/foreach}}
@@ -44,7 +44,7 @@
                         {{else}}
                             {{#match posts.length ">=" 10}}
                                 {{#if skipFirst}}
-                                    {{#get "posts" include="authors" limit="22"}}
+                                    {{#get "posts" include="authors" limit="23"}}
                                         {{#foreach posts from="12"}}
                                             {{> "post-card" lazyLoad=true}}
                                         {{/foreach}}
@@ -61,7 +61,7 @@
                     {{else match @custom.header_style "Magazine"}}
                         {{#match posts.length ">=" 7}}
                             {{#if skipFirst}}
-                                {{#get "posts" include="authors" limit="19"}}
+                                {{#get "posts" include="authors" limit="20"}}
                                     {{#foreach posts from="9"}}
                                         {{> "post-card" lazyLoad=true}}
                                     {{/foreach}}
@@ -76,7 +76,7 @@
                         {{/match}}
                     {{else}}
                         {{#if skipFirst}}
-                            {{#get "posts" include="authors" limit="12"}}
+                            {{#get "posts" include="authors" limit="13"}}
                                 {{#foreach posts from="2"}}
                                     {{> "post-card" lazyLoad=true}}
                                 {{/foreach}}
