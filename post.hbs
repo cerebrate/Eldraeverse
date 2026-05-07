@@ -77,13 +77,16 @@
              // Configure these settings in Ghost theme customization
              DiscourseEmbed = {
                discourseUrl: window.discourseUrl || '', // Set via Ghost theme settings or code injection
-               discourseEmbedUrl: '{{url absolute="true"}}',
              };
              // For WP-era posts whose embed_url was stored with a trailing slash,
              // window.DISCOURSE_TOPIC_ID is injected via codeinjection_head.
-             // Passing topicId lets the embed JS bypass the URL lookup entirely.
+             // We deliberately omit discourseEmbedUrl so embed.js omits embed_url
+             // from the /embed/comments request entirely; the server then uses
+             // topic_id directly, bypassing the failing URL lookup.
              if (window.DISCOURSE_TOPIC_ID) {
                DiscourseEmbed.topicId = window.DISCOURSE_TOPIC_ID;
+             } else {
+               DiscourseEmbed.discourseEmbedUrl = '{{url absolute="true"}}';
              }
 
              // Only load Discourse embed if URL is configured
