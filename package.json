@@ -17,6 +17,12 @@
         "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn version && git push --follow-tags; else echo \"Uncomitted changes found.\" && exit 1; fi",
         "postship": "git fetch && gulp release"
     },
+    "templates": [
+        {
+            "filename": "custom-tag-cloud.hbs",
+            "name": "Tag cloud page"
+        }
+    ],
     "author": {
         "name": "Alistair J. R. Young",
         "email": "avatar@arkane-systems.net",

@@ -1,0 +1,13 @@
+{{#get "tags" include="count.posts" limit="all" order="count.posts desc" filter="visibility:public" as |tag_cloud|}}
+    {{#if tag_cloud}}
+        <section class="gh-tag-cloud-section gh-canvas">
+            <ul class="gh-tag-cloud" role="list">
+                {{#foreach tag_cloud}}
+                    <li class="gh-tag-cloud-item{{#match count.posts ">=" 50}} is-xl{{else match count.posts ">=" 25}} is-l{{else match count.posts ">=" 10}} is-m{{else match count.posts ">=" 5}} is-s{{else}} is-xs{{/match}}">
+                        <a class="gh-tag-cloud-link" href="{{url}}" aria-label="{{name}}, {{count.posts}} posts">{{name}}</a>
+                    </li>
+                {{/foreach}}
+            </ul>
+        </section>
+    {{/if}}
+{{/get}}
