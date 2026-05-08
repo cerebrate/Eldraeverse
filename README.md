@@ -17,4 +17,4 @@ When clicked, the theme selects a random published post and redirects to it. It 
 # Copyright & License
 
 Original Source theme copyright (c) 2013-2023 Ghost Foundation - Released under the [MIT license](LICENSE).
-Modifications copyright (c) 2024 Alistair J. R. Young. Same license.
+Modifications copyright (c) 2024-2026 Alistair J. R. Young. Same license.
