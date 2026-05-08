@@ -1,6 +1,5 @@
 function randomPost() {
     const randomPath = '/random/';
-    const poolSelector = '#gh-random-post-pool a[data-random-post-url]';
     const sitemapIndexPath = '/sitemap.xml';
     const sitemapPostsPath = '/sitemap-posts.xml';
     const homepage = `${window.location.origin}/`;
@@ -12,12 +11,6 @@ function randomPost() {
 
     const isRandomPath = function (pathname) {
         return normalizePath(pathname) === randomPath;
-    };
-
-    const getPostPool = function () {
-        return Array.from(document.querySelectorAll(poolSelector), function (link) {
-            return link.getAttribute('href');
-        }).filter(Boolean);
     };
 
     const toSameOriginUrl = function (value) {
@@ -100,8 +93,7 @@ function randomPost() {
 
     const getCandidatePool = async function () {
         const sitemapPool = await getSitemapPostPool();
-        if (sitemapPool.length) return sitemapPool;
-        return getPostPool();
+        return sitemapPool;
     };
 
     const getRandomTarget = function (urls) {
