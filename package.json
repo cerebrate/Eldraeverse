@@ -2,7 +2,7 @@
     "name": "eldraeverse",
     "description": "Customized version of the Source theme for the Associated Worlds blog.",
     "demo": "https://eldraeverse.com",
-    "version": "1.3.3",
+    "version": "1.4.0",
     "engines": {
         "ghost": ">=5.0.0"
     },

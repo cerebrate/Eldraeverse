@@ -32,8 +32,10 @@ This is a Ghost theme based on the Source theme, maintained for the Associated W
 - **`index.hbs`** - Main index/archive page (full-width, no sidebar)
 - **`post.hbs`** - Single post template
 - **`page.hbs`** - Static page template
+- **`page-random.hbs`** - Intermediate redirect page for `/random/` route
 - **`tag.hbs`** - Tag archive page (full-width, no sidebar)
 - **`author.hbs`** - Author profile page (full-width, no sidebar)
+- **`custom-tag-cloud.hbs`** - Custom page template that renders normal page content plus a tag cloud
 - **`default.hbs`** - Base wrapper for all templates
 
 ### Partials (`partials/` directory)
@@ -149,6 +151,32 @@ This ensures 12 posts appear in the "Other Recent Posts" section while the lates
 - Options include navigation layout, fonts, colors, and feature toggles
 - Image sizes configured under `config.image_sizes`
 - Posts per page configured in `config.posts_per_page` (default: 12)
+
+### Special Features
+
+#### Random Post route (`/random/`)
+- `default.hbs` includes `partials/random-post-pool.hbs`, which emits a hidden same-origin fallback URL list of published posts.
+- `assets/js/random-post.js` handles any click to `/random/` and auto-handles direct visits to `/random/`.
+- Candidate pool is sourced from Ghost post sitemap files (`/sitemap.xml` → `sitemap-posts*`) for full-history coverage, with fallback to the hidden pool.
+- Empty candidate behavior: redirect to homepage.
+- `page-random.hbs` is intentionally minimal and now has light centered styling so the brief redirect flash is visually consistent.
+- Operational usage: create a Ghost page with slug `random`, then add `/random/` in Ghost navigation.
+
+#### Tag cloud page
+- `custom-tag-cloud.hbs` is registered in `package.json` templates as **Tag cloud page**.
+- The page renders authored page content first, then `partials/components/tag-cloud.hbs`.
+- Tag cloud fetch: `{{#get "tags" include="count.posts" limit="all" order="count.posts desc" filter="visibility:public"}}`.
+- Size buckets in markup classes:
+  - `is-xl` for `count.posts >= 50`
+  - `is-l` for `>= 25`
+  - `is-m` for `>= 10`
+  - `is-s` for `>= 5`
+  - `is-xs` otherwise
+
+#### Legacy numeric-slug / WP-era Discourse support
+- `post.hbs` supports comment loading by topic ID when URL-based lookup fails for legacy migrated posts.
+- If `window.DISCOURSE_TOPIC_ID` is present (typically injected via `codeinjection_head` for specific legacy posts), the theme sets `DiscourseEmbed.topicId` and deliberately omits `discourseEmbedUrl`.
+- If `window.DISCOURSE_TOPIC_ID` is absent, the default URL-based mode is used: `DiscourseEmbed.discourseEmbedUrl = '{{url absolute="true"}}'`.
 
 ### Release Workflow
 - Use `npm run ship` to version and push (runs tests automatically)
