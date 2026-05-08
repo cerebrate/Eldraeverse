@@ -155,9 +155,8 @@ This ensures 12 posts appear in the "Other Recent Posts" section while the lates
 ### Special Features
 
 #### Random Post route (`/random/`)
-- `default.hbs` includes `partials/random-post-pool.hbs`, which emits a hidden same-origin fallback URL list of published posts.
 - `assets/js/random-post.js` handles any click to `/random/` and auto-handles direct visits to `/random/`.
-- Candidate pool is sourced from Ghost post sitemap files (`/sitemap.xml` → `sitemap-posts*`) for full-history coverage, with fallback to the hidden pool.
+- Candidate pool is sourced from Ghost post sitemap files (`/sitemap.xml` → `sitemap-posts*`) for full-history coverage.
 - Empty candidate behavior: redirect to homepage.
 - `page-random.hbs` is intentionally minimal and now has light centered styling so the brief redirect flash is visually consistent.
 - Operational usage: create a Ghost page with slug `random`, then add `/random/` in Ghost navigation.
