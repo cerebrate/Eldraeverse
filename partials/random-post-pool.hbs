@@ -1,9 +1,0 @@
-{{#get "posts" limit="all" filter="status:published"}}
-    {{#if posts}}
-        <div id="gh-random-post-pool" hidden aria-hidden="true">
-            {{#foreach posts}}
-                <a data-random-post-url href="{{url}}"></a>
-            {{/foreach}}
-        </div>
-    {{/if}}
-{{/get}}
