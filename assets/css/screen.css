@@ -1005,6 +1005,32 @@ Search                         LOGO                    Login Subscribe
     margin-right: 4px;
 }
 
+.gh-pagination-marker {
+    padding: 18px 20px;
+    border: 1px dashed var(--color-border);
+    border-radius: 12px;
+    background: var(--color-lighter-gray);
+}
+
+.gh-pagination-marker .gh-card-link {
+    display: block;
+}
+
+.gh-pagination-marker .gh-card-excerpt {
+    display: block;
+    margin-top: 6px;
+    -webkit-line-clamp: unset;
+}
+
+.gh-pagination-marker-urls {
+    margin-top: 8px;
+    font-size: 1.25rem;
+    font-family: var(--font-mono);
+    line-height: 1.45;
+    color: var(--color-secondary-text);
+    overflow-wrap: anywhere;
+}
+
 /* 8. Header
 /* ---------------------------------------------------------- */
 
